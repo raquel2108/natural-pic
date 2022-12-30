@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import "./index.css";
+import axios from "axios";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navbar from "./Components/Navbar";
+import Home from "./views/Home";
+import Favoritos from "./views/Favoritos";
+import { useEffect } from "react";
+import useImages from "./Images/UseImages";
 
-function App() {
+export default function App() {
+  const { setImagenes } = useImages();
+
+  useEffect(() => {
+    async function getImagenes() {
+    const url = `https://demo0670365.mockable.io/naturalpics`;
+      const resultado = await axios(url);
+      setImagenes(resultado.data.photos);
+    }
+
+    getImagenes();
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/favoritos" element={<Favoritos />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
-
-export default App;
